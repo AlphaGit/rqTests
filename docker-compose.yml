@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  producer:
+    build:
+      context: .
+      dockerfile: producer.Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker.Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/
+
+  redis:
+    image: library/redis:alpine
+    ports:
+      - 6379:6379
